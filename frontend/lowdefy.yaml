@@ -18,6 +18,7 @@ pages:
   - _ref: new_epic.yaml
   - _ref: new_client.yaml
   - _ref: new_rate.yaml
+  - _ref: forecast.yaml
 
 menus:
   - id: default
@@ -39,8 +40,14 @@ menus:
         pageId: work_time # Id of the brands page.
         properties:
           title: Work Time
-          icon: LaptopOutlined 
-      
+          icon: LaptopOutlined     
+      - id: forecast # Define the menu link that directs to the brands page.
+        type: MenuLink
+        pageId: forecast # Id of the brands page.
+        properties:
+          title: Forecast
+          icon: RiseOutlined  
+
       - id: admin
         properties:
           title: Admin

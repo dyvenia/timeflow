@@ -16,6 +16,13 @@ class TimeLog(SQLModel, table=True):
     month: Optional[int]
     year: Optional[int]
 
+class Forecast(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_initials: str
+    epic_name: str
+    work_hours: int
+    month: int
+    year: int
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

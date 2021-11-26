@@ -1,0 +1,212 @@
+requests:
+  
+  - id: get_user_id
+    type: AxiosHttp
+    connectionId: app_api
+    properties:
+      url: /api/users
+  
+  - id: get_epics
+    type: AxiosHttp
+    connectionId: app_api
+    properties:
+      url: /api/epics
+
+  - id: get_clients
+    type: AxiosHttp
+    connectionId: app_api
+    properties:
+      url: /api/clients
+
+events:
+  onEnter:
+    - id: fetch_users
+      type: Request
+      params: get_user_id
+
+    - id: fetch_clients
+      type: Request
+      params: get_clients
+    
+    - id: fetch_countries
+      type: Request
+      params: get_epics
+
+    - id: set_is_submit_visible
+      type: SetState
+      params:
+        is_submit_visible: false
+
+#Layout
+id: forecast
+type: PageSiderMenu
+properties:
+  logo:
+    src: http://localhost:3000/public/logo_web.svg
+areas:
+  content:
+    gutter: 20
+    blocks:
+      
+      - id: user_initials
+        type: Selector
+        layout:
+          span: 2
+        required: true
+        properties:
+          placeholder: User
+          label:
+            disabled: true
+          options:
+            _request: get_user_id.data
+
+      - id: select_client
+        type: Selector
+        layout:
+          span: 4
+        required: true
+        properties:
+          label:
+            disabled: true
+          placeholder: Select Client
+          options:
+            _request: get_clients.data
+
+      - id: select_epic
+        type: Selector
+        layout:
+          span: 4
+        required: true
+        properties:
+          label:
+            disabled: true
+          placeholder: Select Epic
+          options:
+            _request: get_epics.data
+      
+      - id: select_month
+        type: MonthSelector
+        required: true
+        layout:
+          span: 4
+        properties:
+          label:
+            disabled: true
+          placeholder: Select Month
+          disabledDates:
+            dates: []
+            ranges: []
+      
+      - id: expected_days
+        type: TextInput
+        required: true
+        layout:
+          span: 4
+        properties:
+          label:
+            disabled: true
+          placeholder: Number of days
+
+      - id: block_id
+        type: Button
+        layout:
+          span: 2
+        properties:
+          title: Review
+        events:
+          onClick:
+            - id: update_review
+              type: SetState
+              params:
+                review_text: 
+                  _nunjucks: 
+                    |
+                        #### You are logging forecast for:
+                        |     User     |      Client     |      Epic      |  Month    |   Expected Days   |
+                        |:----------:|:-----------------|:--------------:|:--------------:|:------------:|
+                        | {{user_initials}}|{{select_client}}| {{select_epic}}| {{select_month}} | {{expected_days}} |
+
+            - id: set_is_submit_visible
+              type: SetState
+              params:
+                is_submit_visible: true
+            - id: set_is_validated
+              type: SetState
+              params:
+                is_validated: "Click Confirm to submit the forecast"
+      
+      - id: reset_button
+        type: Button
+        layout:
+          span: 3
+        properties:
+          title: Reset
+          block: true
+          type: default
+          icon: ClearOutlined
+        events:
+          onClick:
+            - id: reset
+              type: Reset
+            - id: set_submit_to_false
+              type: SetState
+              params:
+                is_submit_visible: false
+      
+      - id: review_output
+        type: Markdown
+        properties:
+          content:
+            _state: review_text
+      
+      - id: submit_log
+        type: Button
+        visible: 
+          _state: is_submit_visible
+        properties:
+          color: red
+          title: Confirm
+        events:
+          onClick:
+            - id: validate_inputs
+              type: Validate
+              params:
+                - user_initials
+                - select_company
+                - select_epic
+                - select_month
+                - expected_days
+
+            - id: set_timelog
+              type: SetState
+              params:
+                timelog_data:
+                  user_initials:
+                    _state: user_initials
+                  client_name:
+                    _state: select_client
+                  epic_name:
+                    _state: select_epic
+                  month: 
+                    _state: select_month
+                  expected_days:
+                    _state: expected_days
+
+            - id: post_timelog
+              type: Request
+              params: post_timelog
+            - id: hide_confirm
+              type: Reset
+            - id: set_submit_to_false
+              type: SetState
+              params:
+                is_submit_visible: false
+            - id: after_validations
+              type: SetState
+              params:
+                is_validated: "Forecast was submitted"
+      - id: is_validated_output
+        type: Markdown
+        properties:
+          content:
+            _state: is_validated
