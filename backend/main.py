@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from sqlmodel import Session, select, SQLModel
 from sqlalchemy.exc import OperationalError
-from models import Epic, TimeLog, User, engine, create_db, Client
+from models import Epic, TimeLog, User, engine, create_db, Client, Forecast
 from  utils import *
 import datetime
 
@@ -57,9 +57,12 @@ async def get_timelogs():
 
 # For Work Time page
 # Get TimeLog by user_id, epic_name and time period
-@app.get("/api/timelogs/{user_id},{epic_name},{start_time},{end_time}")
+@app.get("/api/timelogs")
 async def get_user_by_epic_name(user_id, epic_name, start_time, end_time):
-    get_user = get_user_worktime_random(user_id, epic_name, start_time, end_time)
+    get_user = get_user_worktime_random(TimeLog.user_initials, 
+                                        TimeLog.epic_name, 
+                                        TimeLog.start_time, 
+                                        TimeLog.end_time)
     return get_user
 
 
@@ -86,6 +89,11 @@ async def epics():
     results = session.exec(statement).all()
     return results
 
+@app.get("/api/forecast/")
+async def get_user_forecast_per_month():
+    statement = select(User.id, Forecast.year, Forecast.month)
+    results = session.exec(statement).all()
+    return results
 
 # Post user
 @app.post("/api/user/")
@@ -137,8 +145,29 @@ async def timelog(timelog: TimeLog):
         epic_name=timelog.epic_name,
         work_hours=work_hours,
         month=month_from_dt,
-        year=year_from_dt,
+        year=year_from_dt
     )
 
     session.add(new_timelog)
     session.commit()
+
+@app.post("/api/forecast/")
+async def forecast(forecast: Forecast):
+    statement = select(User.id).where(User.id == forecast.user_id)
+    results = session.exec(statement).first()
+
+    startt_to_dt = string_to_datetime(timelog.start_time)
+
+    new_forecast = Forecast(
+        id = forecast.id,
+        user_id=forecast.user_id,
+        epic_id=forecast.epic_id,
+        work_days=forecast.work_days,
+        month=startt_to_dt.month,
+        year=startt_to_dt.year
+    )    
+
+    session.add(new_forecast)
+    session.commit()
+    return "Hallo"
+
