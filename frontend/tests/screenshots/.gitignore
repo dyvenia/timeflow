@@ -1,0 +1,4 @@
+# Ignore contents of screenshots folder but keep the folder
+*
+*/
+!.gitignore
