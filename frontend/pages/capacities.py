@@ -92,24 +92,20 @@ def create_capacity_form(
         )
         switch_state(is_event, set_is_event)
 
-    selector_user_id = Selector2(
-        set_value=set_user_id, data=users_names(), width='24%')
+    selector_user_id = Selector2(set_value=set_user_id, data=users_names())
 
     selector_team_id = Selector2(
         set_value=set_team_id,
         data=teams_id_name(),
-        width='24%'
     )
     selector_year_month = Selector2(
         set_value=set_year_month,
         data=year_month_dict_list(),
-        width='24%'
     )
 
     selector_days = Selector2(
         set_value=set_days,
         data=capacity_days(),
-        width='24%'
     )
 
     is_disabled = True
@@ -124,7 +120,6 @@ def create_capacity_form(
             selector_team_id,
             selector_year_month,
             selector_days,
-            justify='justify-between'
         ),
         Row(btn),
     )
@@ -149,6 +144,12 @@ def delete_capacity(is_event, set_is_event):
     inp_capacity = Input(
         set_value=set_capacity_to_del,
         label="capacity id to delete",
-        width='full'
     )
-    return Column(Row(inp_capacity), Row(Button(False, handle_delete, label="Delete")))
+    btn = html.button(
+        {
+            "class": "relative w-fit h-fit px-2 py-1 text-lg border text-gray-50  border-secondary-200",
+            "onClick": handle_delete,
+        },
+        "Delete",
+    )
+    return Column(Row(inp_capacity), Row(btn))

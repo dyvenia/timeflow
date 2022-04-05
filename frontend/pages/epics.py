@@ -1,7 +1,6 @@
 import asyncio
 from cProfile import label
 import json
-from turtle import width
 from idom import html, run, use_state, component, event, vdom
 import requests
 from sanic import Sanic, response
@@ -106,16 +105,14 @@ def create_epic_form(
         # Triggers state change
         set_submitted_name(name)
 
-    inp_short_name = Input(set_short_name, "epics short name", width='[14%]')
-    inp_name = Input(set_name, "epics full name", width='[14%]')
-    selector_team = Selector2(set_team_id, teams_id_name(), width='14%')
-    selector_sponsor = Selector2(
-        set_sponsor_id, sponsors_id_name(), width='14%')
+    inp_short_name = Input(set_short_name, "epics short name")
+    inp_name = Input(set_name, "epics full name")
+    selector_team = Selector2(set_team_id, teams_id_name())
+    selector_sponsor = Selector2(set_sponsor_id, sponsors_id_name())
     selector_start_month = Selector2(
-        set_year_month, year_month_dict_list(label="select start month"), width='14%'
+        set_year_month, year_month_dict_list(label="select start month")
     )
-    selector_start_day = Selector2(
-        set_day, days_in_month(label="select start day"), width='14%')
+    selector_start_day = Selector2(set_day, days_in_month(label="select start day"))
     is_disabled = True
     if (
         short_name != ""
@@ -136,7 +133,6 @@ def create_epic_form(
             selector_sponsor,
             selector_start_month,
             selector_start_day,
-            justify='justify-between'
         ),
         Row(btn),
     )
@@ -162,13 +158,12 @@ def deactivate_epic(set_deact_epic):
         return True
 
     inp_deact_epic = Input(
-        set_value=set_epic_to_deact, label="epic id to be deactivated", width='[96%]'
+        set_value=set_epic_to_deact, label="epic id to be deactivated"
     )
     is_disabled = True
     if epic_to_deact != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_deactivation,
-                 label="Deactivate")
+    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
     return Column(Row(inp_deact_epic), Row(btn))
 
 
@@ -184,11 +179,9 @@ def activate_epic(set_activ_epic):
         set_activ_epic(epic_to_activ)
         return True
 
-    inp_activ_epic = Input(set_value=set_epic_to_activ,
-                           label="epic id to be activated", width='[96%]')
+    inp_activ_epic = Input(set_value=set_epic_to_activ, label="epic id to be activated")
     is_disabled = True
     if epic_to_activ != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_activation,
-                 label="Activate")
+    btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
     return Column(Row(inp_activ_epic), Row(btn))

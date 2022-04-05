@@ -80,16 +80,13 @@ def create_sponsor_form(
         set_submitted_short_name(short_name)
 
     # Create input field for the name of the sponsor
-    inp_name = Input(set_value=set_name,
-                     label="full name of the sponsor", width='[32%]')
+    inp_name = Input(set_value=set_name, label="full name of the sponsor")
 
     # Create input field for the short name of the sponsor
-    inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the sponsor", width='[32%]')
+    inp_short_name = Input(set_value=set_short_name, label="short name of the sponsor")
 
     # Create a dropdown of clients which can then be selected
-    selector_client_id = Selector2(
-        set_value=set_client_id, data=clients_names(), width='32%')
+    selector_client_id = Selector2(set_value=set_client_id, data=clients_names())
 
     # Create submit button
     btn = submit_button(handle_submit, name, short_name, client_id)
@@ -99,7 +96,6 @@ def create_sponsor_form(
             inp_name,
             inp_short_name,
             selector_client_id,
-            justify='justify-between'
         ),
         Row(btn),
     )
@@ -130,7 +126,7 @@ def deactivate_sponsor(set_deact_name):
 
     # Create input field for name of sponsor to be deactivated
     inp_deact_name = Input(
-        set_value=set_name_to_deact, label="sponsor to be deactivated", width='full'
+        set_value=set_name_to_deact, label="sponsor to be deactivated"
     )
 
     # Create the deactivation button
@@ -150,8 +146,7 @@ def activate_sponsor(set_activ_name):
         set_activ_name(name_to_activ)
 
     # Create input field for name of sponsor to be activated
-    inp_activ_name = Input(set_value=set_name_to_activ,
-                           label="sponsor to be activated", width='full')
+    inp_activ_name = Input(set_value=set_name_to_activ, label="sponsor to be activated")
 
     # Create the activation button
     btn = activation_button(name_to_activ, handle_activation)

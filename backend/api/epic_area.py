@@ -126,8 +126,7 @@ async def update_epic(
     session: Session = Depends(get_session),
 ):
     """Update an epic area"""
-    statement = select(EpicArea).where(
-        or_(EpicArea.name == name, EpicArea.id == id))
+    statement = select(EpicArea).where(or_(EpicArea.name == name, EpicArea.id == id))
     epic_area_to_update = session.exec(statement).one()
     epic_area_to_update.epic_id = epic_id
     epic_area_to_update.name = name

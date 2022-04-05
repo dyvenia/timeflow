@@ -9,11 +9,6 @@ class_str = """text-primary-500 placeholder-secondary-400 w-full px-4 py-2.5 mt-
                     focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 
                     ring-gray-400"""
 
-inputWrapperClass = 'w-full md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-[401px]'
-selectClass = "w-full border-select-border py-3 pl-3 border-[1px] rounded-[3px] appearance-none"
-selectWrapperClass = "block relative w-full sm:w-[48%] md:w-[121px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-{width} 2xl:mr-0"
-checkboxTd = 'w-6 pr-4 pt-4 pb-3'
-
 
 @component
 def Input(
@@ -22,43 +17,15 @@ def Input(
     type: str = "text",
     placeholder: str = "Write here the",
     _class: str = class_str,
-    width: str = '[401px]'
 ):
 
-    return html.div(
-        {'class': f"w-full my-4 md:w-1/2 flex justify-between items-center border-input-border border-[1px] rounded-[3px] py-2 px-4 xl:max-w-{width} xl:w-full"},
-        html.input(
-            {
-                "type": type,
-                "placeholder": f"{placeholder} {label}",
-                "onChange": lambda event: set_value(event["target"]["value"]),
-                "class": _class,
-            }
-        )
-    )
-
-
-@component
-def SearchInput(input_value, set_input_value):
-
-    def handle_click(event):
-        set_input_value('')
-
-    return html.div(
-        {'class': inputWrapperClass},
-        html.img({'src': '../static/img/svg/search.svg'}),
-        html.input({
-            'type': 'text',
-            'placeholder': 'Search your timelog here',
-            'value': input_value,
-            'onChange': lambda event: set_input_value(event["target"]["value"]),
-            'class': 'w-10/12 outline-none'
-        }, ),
-        html.img({
-            'class': 'cursor-pointer',
-            'src': '../static/img/svg/cross.svg',
-            'onClick': handle_click,
-        })
+    return html.input(
+        {
+            "type": type,
+            "placeholder": f"{placeholder} {label}",
+            "onChange": lambda event: set_value(event["target"]["value"]),
+            "class": _class,
+        }
     )
 
 
@@ -83,22 +50,19 @@ def Selector(
 def Selector2(
     set_value: Callable,
     data: List[Select],
-    width: str = "14%"
+    _class: str = class_str,
 ):
     options = []
     for row in data:
         option = html.option({"value": row["value"]}, row["display_value"])
         options.append(option)
 
-    return html.div(
-        {'class': f"block relative w-full sm:w-[48%] md:w-[121px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0"},
-        html.select(
-            {
-                "class": selectClass,
-                "onChange": lambda event: set_value(event["target"]["value"]),
-            },
-            options,
-        )
+    return html.select(
+        {
+            "class": _class,
+            "onChange": lambda event: set_value(event["target"]["value"]),
+        },
+        options,
     )
 
 
@@ -134,38 +98,4 @@ def AutoSelect(
             "onChange": lambda event: set_value(event["target"]["value"]),
         },
         option,
-    )
-
-
-@component
-def SelectPerPage(set_select_per_page, per_page_list):
-    dropdown = [html.option({'value': el}, el) for el in per_page_list]
-
-    return html.div(
-        {'class': 'block w-[176px] shrink-0 relative md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute 2xl:mr-0'},
-        html.select(
-            {
-                'class': selectClass,
-                'onChange': lambda event: set_select_per_page(event["target"]["value"])
-            },
-            html.option({'disabled': True,
-                         'selected': True}, 'Results per page'),
-            dropdown
-        ),
-    )
-
-
-@component
-def Checkbox(value_checkbox, handle_change):
-    return html.td(
-        {
-            'class': checkboxTd,
-        },
-        html.input(
-            {
-                'class': 'w-4 h-4',
-                'checked': value_checkbox,
-                'onChange': lambda event: handle_change(event),
-                'type': 'checkbox'
-            })
     )
