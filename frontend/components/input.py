@@ -99,7 +99,6 @@ def AutoSelect(
         },
         option,
     )
-<<<<<<< HEAD
 
 
 @component
@@ -132,5 +131,3 @@ def Checkbox(value_checkbox, handle_change):
                 'type': 'checkbox'
             })
     )
-=======
->>>>>>> main
