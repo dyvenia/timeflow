@@ -12,7 +12,17 @@ session = Session(engine)
 
 @router.post("/")
 async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_session)):
-    """Post a forecast."""
+    """
+    Post a new forecast.
+
+    Parameters
+    ----------
+    forecast : Forecast
+        Forecast that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the forecast.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Forecast).where(
         and_(
             Forecast.epic_id == forecast.epic_id,
@@ -34,7 +44,15 @@ async def post_forecast(*, forecast: Forecast, session: Session = Depends(get_se
 
 @router.get("/")
 async def get_forecasts(session: Session = Depends(get_session)):
-    """Get all forecasts."""
+    """
+    Get list of forecasts.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of the forecasts.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Forecast)
     result = session.exec(statement).all()
     return result
@@ -44,7 +62,17 @@ async def get_forecasts(session: Session = Depends(get_session)):
 async def get_forecasts_users(
     user_id: str = None, session: Session = Depends(get_session)
 ):
-    """Get forecasts from a given user."""
+    """
+    Get forecasts from a given user.
+
+    Parameters
+    ----------
+    user_id : str
+        User ID of user from which forecasts are to be pulled from.
+    session : Session
+        SQL session that is to be used to get the forecasts.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     if user_id != None:
         statement = (
             select(
@@ -65,9 +93,21 @@ async def get_forecasts_users(
 
 @router.get("/users/{user_id}/epics/{epic_id}")
 async def get_forecasts_by_user_year_epic(
-    user_id, epic_id, session: Session = Depends(get_session)
+    user_id: str, epic_id: str, session: Session = Depends(get_session)
 ):
-    """Get forecast by user and epic"""
+    """
+    Get forecast by user and epic
+
+    Parameters
+    ----------
+    user_id : str
+        User ID of user from which to pull forecasts from.
+    epic_id : str
+        Epic ID of epic from which to pull forecasts from.
+    session : Session
+        SQL session that is to be used to get the forecasts.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(Forecast.month, Forecast.days)
         .where(Forecast.user_id == user_id)
@@ -81,7 +121,21 @@ async def get_forecasts_by_user_year_epic(
 async def get_forecasts_by_user_year_epic(
     user_id, year, month, session: Session = Depends(get_session)
 ):
-    """Get forecast by user and month_year"""
+    """
+    Get forecast by user ID, month, and year.
+
+    Parameters
+    ----------
+    user_id
+        ID of user from which to pull forecasts from.
+    year
+        Year from which to pull forecasts from.
+    month
+        Month from which to pull forecasts from.
+    session : Session
+        SQL session that is to be used to get the forecasts.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(Epic.name, Forecast.year, Forecast.month, Forecast.days)
         .where(Forecast.user_id == user_id)
@@ -97,7 +151,23 @@ async def get_forecasts_by_user_year_epic(
 async def get_forecasts_by_user_year_epic(
     user_id, epic_id, year, month, session: Session = Depends(get_session)
 ):
-    """Get forecast by user, epic, year, month"""
+    """
+    Get forecast by user, epic, year, month
+
+    Parameters
+    ----------
+    user_id
+        ID of user from which to pull forecasts from.
+    epic_id
+        ID of epic from which to pull forecasts from.
+    year
+        Year from which to pull forecasts from.
+    month
+        Month from which to pull forecasts from.
+    session : Session
+        SQL session that is to be used to get the forecasts.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(Forecast.id, Forecast.month, Forecast.year, Forecast.days)
         .where(Forecast.user_id == user_id)
@@ -118,7 +188,25 @@ async def update_forecasts(
     days: float = None,
     session: Session = Depends(get_session),
 ):
-    """Update a forecast"""
+    """
+    Update a forecast.
+
+    Parameters
+    ----------
+    user_id : str
+        ID of user to update.
+    epic_id : str
+        ID of epic to update.
+    month : int
+        Month to update.
+    year : int
+        Year to update.
+    days : float
+        Days to update.
+    session : Session
+        SQL session that is to be used to update the forecast.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Forecast).where(
         and_(
             Forecast.user_id == user_id,
@@ -140,7 +228,17 @@ async def delete_forecasts(
     forecast_id: str = None,
     session: Session = Depends(get_session),
 ):
-    """Delete a forecast"""
+    """
+    Delete a forecast
+
+    Parameters
+    ----------
+    forecast_id : str
+        ID of forecast to delete.
+    session : Session
+        SQL session that is to be used to delete the forecast.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Forecast).where(
         Forecast.id == forecast_id,
     )

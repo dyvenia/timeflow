@@ -15,6 +15,17 @@ async def rate(
     session: Session = Depends(get_session),
 ):
     """Post new rate"""
+    """
+    Post new rate.
+
+    Parameters
+    ----------
+    rate : Rate
+        Rate that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the rate.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement1 = (
         select(Rate)
         .where(Rate.user_id == rate.user_id)
@@ -38,7 +49,6 @@ async def rate(
             rate_to_close = session.exec(statement2).one()
             rate_to_close.valid_to = close_date
             rate_to_close.updated_at = datetime.now()
-            rate_to_close.is_active = False
             session.add(rate_to_close)
             session.add(rate)
             session.commit()
@@ -53,24 +63,41 @@ async def rate(
 async def read_rates(
     session: Session = Depends(get_session),
 ):
-    """Get all rates"""
+    """
+    Get all rates.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get the rates.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Rate)
     result = session.exec(statement).all()
     return result
 
 
-@router.get("/users/{user_id}/clients/{client_id}/active")
-async def read_active_rate(
+@router.get("/users/{user_id}/clients/{client_id}/")
+async def rates_by_user_client(
     user_id: int,
     client_id: int,
     session: Session = Depends(get_session),
 ):
-    """Get an active rate from a given user_id and client_id"""
+    """
+    Get list of rates using given user ids and clients ids as keys.
+
+    Parameters
+    ----------
+    user_id : int
+        User id that is used to get list of rates.
+    client_id : int
+        Client id that is used to get the list of rates.
+    session : Session
+        SQL session that is to be used to read a certain rates.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
-        select(Rate)
-        .where(Rate.user_id == user_id)
-        .where(Rate.client_id == client_id)
-        .where(Rate.is_active == True)
+        select(Rate).where(Rate.user_id == user_id).where(Rate.client_id == client_id)
     )
     result = session.exec(statement).all()
     return result
@@ -83,7 +110,21 @@ async def rates_by_user_client_date(
     date: str,
     session: Session = Depends(get_session),
 ):
-    """Get rates from a certain date."""
+    """
+    Get rates from a certain date using a user id and client id as keys.
+
+    Parameters
+    ----------
+    user_id : int
+        User id of user who's rate is in question.
+    client_id : int
+        Client id of client that's contracting the user.
+    date : str
+        Date from which the rates are needed.
+    session : Session
+        SQL session that is to be used to get the rates.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     month_start_date = date_str_to_date(date)
     statement = (
         select(Rate)
@@ -101,7 +142,17 @@ async def activate_rate(
     rate_id: str,
     session: Session = Depends(get_session),
 ):
-    """Activate a rate from a given rate_id."""
+    """
+    Activate a rate using its id as a key.
+
+    Parameters
+    ----------
+    rate_id : str
+        ID of the rate to be activated.
+    session : Session
+        SQL session that is to be used to activate a rate.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Rate).where(Rate.id == rate_id)
     rate_to_activate = session.exec(statement).one()
     rate_to_activate.is_active = True
@@ -117,7 +168,17 @@ async def deactivate_rate_id(
     rate_id: str = None,
     session: Session = Depends(get_session),
 ):
-    """Deactivate a rate from a given rate_id."""
+    """
+    Deactivate a rate using its id as a key.
+
+    Parameters
+    ----------
+    rate_id : str
+        ID of the rate to be deactivated.
+    session : Session
+        SQL session that is to be used to deactivate a rate.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Rate).where(Rate.id == rate_id)
     rate_id_to_deactivate = session.exec(statement).one()
     rate_id_to_deactivate.is_active = False
@@ -130,18 +191,26 @@ async def deactivate_rate_id(
 
 @router.put("/")
 async def update_rates(
-    user_id: str = None,
-    client_id: str = None,
+    rate_id: int = None,
     new_amount: str = None,
     session: Session = Depends(get_session),
 ):
-    """Update a rate."""
-    statement = (
-        select(Rate)
-        .where(Rate.user_id == user_id)
-        .where(Rate.client_id == client_id)
-        .where(Rate.is_active == True)
-    )
+    """
+    Update a rate with new values.
+
+    Parameters
+    ----------
+    user_id : str
+        ID of user to be updated.
+    client_id : str
+        ID of client to be updated.
+    new_amount : str
+        Amount to be updated.
+    session : Session
+        SQL session that is to be used to update the rate.
+        Defaults to creating a dependency on the running SQL model session.
+    """
+    statement = select(Rate).where(Rate.id == rate_id)
     rate_to_update = session.exec(statement).one()
     rate_to_update.amount = new_amount
     session.add(rate_to_update)

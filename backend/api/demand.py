@@ -13,7 +13,17 @@ session = Session(engine)
 
 @router.post("/")
 async def post_demand(*, demand: Demand, session: Session = Depends(get_session)):
-    """Post a demand."""
+    """
+    Post a demand.
+
+    Parameters
+    ----------
+    demand : Demand
+        Demand that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the demand.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Demand).where(
         and_(
             Demand.team_id == demand.team_id,
@@ -41,9 +51,27 @@ async def get_demands(
     month: int = None,
     year: int = None,
 ):
-    """Get list of all demands"""
+    """
+    Get list of all demands.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of all of the demands.
+        Defaults to creating a dependency on the running SQL model session.
+    is_locked : bool
+        Whether or not the demand is locked or not.
+    team_id : int
+        ID of the team to get the demand from.
+    epic_id : int
+        ID of the epic to get the demand from.
+    month : int
+        Month of the demand.
+    year : int
+        Year of the demand.
+    """
     statement = select(Demand)
-    """Select demand by epic_id, team_id, month, year"""
+    # Select demand by epic_id, team_id, month, year
     if (team_id and epic_id and month and year) != None:
         statement = (
             select(
@@ -72,7 +100,17 @@ async def delete_demands(
     demand_id: str = None,
     session: Session = Depends(get_session),
 ):
-    """Delete a demand"""
+    """
+    Delete a demand.
+
+    Parameters
+    ----------
+    demand_id : str
+        ID of the demand that is to be removed from the database.
+    session : Session
+        SQL session that is to be used to delete the demand.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Demand).where(
         Demand.id == demand_id,
     )

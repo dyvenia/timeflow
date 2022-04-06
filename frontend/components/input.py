@@ -99,3 +99,38 @@ def AutoSelect(
         },
         option,
     )
+<<<<<<< HEAD
+
+
+@component
+def SelectPerPage(set_select_per_page, per_page_list):
+    dropdown = [html.option({'value': el}, el) for el in per_page_list]
+
+    return html.div(
+        {'class': 'block w-[176px] shrink-0 relative md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute 2xl:mr-0'},
+        html.select(
+            {
+                'class': selectClass,
+                'onChange': lambda event: set_select_per_page(event["target"]["value"])
+            },
+            dropdown
+        ),
+    )
+
+
+@component
+def Checkbox(value_checkbox, handle_change):
+    return html.td(
+        {
+            'class': checkboxTd,
+        },
+        html.input(
+            {
+                'class': 'w-4 h-4',
+                'checked': value_checkbox,
+                'onChange': lambda event: handle_change(event),
+                'type': 'checkbox'
+            })
+    )
+=======
+>>>>>>> main

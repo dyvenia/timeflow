@@ -15,7 +15,17 @@ async def post_user(
     user: User,
     session: Session = Depends(get_session),
 ):
-    """Post new user"""
+    """
+    Post a new user.
+
+    Parameters
+    ----------
+    user : User
+        User that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the user.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(User).where(User.short_name == user.short_name)
     try:
         result = session.exec(statement).one()
@@ -32,14 +42,20 @@ async def get_users(
     session: Session = Depends(get_session),
     is_active: bool = None,
     short_name: str = None,
-    user_name: str = None,
-    user_surname: str = None,
-    email: str = None,
-    role_id: str = None,
-    start_date: str = None,
-    team_id: int = None,
 ):
-    """Get list of all users"""
+    """
+    Get list of user(s).
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get the users.
+        Defaults to creating a dependency on the running SQL model session.
+    is_active : bool
+        Status of users to be pulled.
+    short_name : str
+        Short name of user to be pulled.
+    """
     statement = select(User)
     if is_active != None:
         statement = select(User).where(User.is_active == is_active)
@@ -64,7 +80,29 @@ async def update_user(
     new_team_id: Optional[str] = None,
     session: Session = Depends(get_session),
 ):
-    """Update user email"""
+    """
+    Update a user.
+
+    Parameters
+    ----------
+    user_id : int
+        ID of user to be updated.
+    is_active : Optional[bool]
+        Updated status of user.
+    new_short_name : Optional[bool]
+        Updated short name of user.
+    new_first_name : Optional[bool]
+        Updated first name of user.
+    new_last_name : Optional[bool]
+        Updated last name of user.
+    new_email : Optional[bool]
+        Updated email of user
+    new_team_id : Optional[bool]
+        Updated team id.
+    session : Session
+        SQL session that is to be used to update the user.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(User).where(User.id == user_id)
     user_to_update = session.exec(statement).one()
     if is_active != None:

@@ -16,7 +16,17 @@ async def post_team(
     team: Team,
     session: Session = Depends(get_session),
 ):
-    """Post new team"""
+    """
+    Post new team.
+
+    Parameters
+    ----------
+    team : Team
+        Team that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the team.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Team).where(or_(Team.name == team.name, Team.id == team.id))
     try:
         result = session.exec(statement).one()
@@ -30,7 +40,15 @@ async def post_team(
 
 @router.get("/")
 async def get_team_list(session: Session = Depends(get_session)):
-    """Get team list"""
+    """
+    Get list of all teams.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get the list of teams.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Team)
     results = session.exec(statement).all()
     return results
@@ -38,7 +56,15 @@ async def get_team_list(session: Session = Depends(get_session)):
 
 @router.get("/active")
 async def get_active_team_list(session: Session = Depends(get_session)):
-    """Get list of active teams"""
+    """
+    Get list of active teams.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of the active teams.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(
             Team.id,
@@ -57,7 +83,17 @@ async def get_active_team_list(session: Session = Depends(get_session)):
 
 @router.get("/{team_name}")
 async def read_teams(team_name: str = None, session: Session = Depends(get_session)):
-    """Read the contents of a given team"""
+    """
+    Read the contents of a given team.
+
+    Parameters
+    ----------
+    team_name : str
+        Name of team to be read.
+    session : Session
+        SQL session that is to be used to read the team.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Team).where(Team.name == team_name)
     try:
         result = session.exec(statement).one()
@@ -71,7 +107,17 @@ async def read_teams(team_name: str = None, session: Session = Depends(get_sessi
 async def get_user_name_by_team_id(
     team_id: int, session: Session = Depends(get_session)
 ):
-    """Get user name by team id"""
+    """
+    Get user name by team id.
+
+    Parameters
+    ----------
+    team_id : str
+        ID of team to pull user name from.
+    session : Session
+        SQL session that is to be used to get the user name.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(Team.id, User.id, User.name)
         .join(User)
@@ -87,7 +133,17 @@ async def activate_team(
     team_name: str = None,
     session: Session = Depends(get_session),
 ):
-    """Activate team"""
+    """
+    Activate a team.
+
+    Parameters
+    ----------
+    team_name : str
+        Name of team to be activated.
+    session : Session
+        SQL session that is to be used to activate the team.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Team).where(Team.name == team_name)
     team_to_activate = session.exec(statement).one()
     team_to_activate.is_active = True
@@ -103,7 +159,17 @@ async def deactivate_team(
     team_name: str = None,
     session: Session = Depends(get_session),
 ):
-    """Deactivate team"""
+    """
+    Deactivate a team.
+
+    Parameters
+    ----------
+    team_name : str
+        Name of team to be deactivated.
+    session : Session
+        SQL session that is to be used to deactivate the team.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Team).where(Team.name == team_name)
     team_to_deactivate = session.exec(statement).one()
     team_to_deactivate.is_active = False
@@ -122,7 +188,23 @@ async def update_team(
     is_active: bool = None,
     session: Session = Depends(get_session),
 ):
-    """Update team"""
+    """
+    Update a team with new values.
+
+    Parameters
+    ----------
+    id : str
+        ID of team to be updated.
+    lead_user_id : str
+        Updated lead user ID.
+    name : str
+        Updated name of team.
+    is_active : bool
+        Updated status of team.
+    session : Session
+        SQL session that is to be used to update the team.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Team).where(or_(Team.name == name, Team.id == id))
     team_to_update = session.exec(statement).one()
     team_to_update.lead_user_id = lead_user_id

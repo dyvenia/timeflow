@@ -8,9 +8,20 @@ from datetime import datetime
 router = APIRouter(prefix="/api/roles", tags=["role"])
 session = Session(engine)
 
-# Post new role
+
 @router.post("/")
 async def post_role(*, role: Role, session: Session = Depends(get_session)):
+    """
+    Post a new role.
+
+    Parameters
+    ----------
+    role : Role
+        Role that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the role.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Role).where(Role.id == role.id)
     try:
         result = session.exec(statement).one()
@@ -22,17 +33,33 @@ async def post_role(*, role: Role, session: Session = Depends(get_session)):
         return role
 
 
-# Get list of all roles
 @router.get("/")
 async def read_roles(session: Session = Depends(get_session)):
+    """
+    Get list of all roles.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get the roles.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Role)
     results = session.exec(statement).all()
     return results
 
 
-# Get list of active roles
 @router.get("/active")
 async def read_roles(session: Session = Depends(get_session)):
+    """
+    Get list of active roles.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get the roles.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Role).where(Role.is_active == True)
     results = session.exec(statement).all()
     return results
@@ -43,6 +70,17 @@ async def activate_role(
     role_id: str = None,
     session: Session = Depends(get_session),
 ):
+    """
+    Activate a role using the role ID as a key.
+
+    Parameters
+    ----------
+    role_id : str
+        ID of role to be activated.
+    session : Session
+        SQL session that is to be used to activate the role.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Role).where(Role.id == role_id)
     role_to_activate = session.exec(statement).one()
     role_to_activate.is_active = True
@@ -53,12 +91,22 @@ async def activate_role(
     return role_to_activate
 
 
-# Deactivate role
 @router.put("/{role_id}/deactivate")
 async def deactivate_role(
     role_id: str = None,
     session: Session = Depends(get_session),
 ):
+    """
+    Deactivate a role using the role ID as a key.
+
+    Parameters
+    ----------
+    role_id : str
+        ID of role to be deactivated.
+    session : Session
+        SQL session that is to be used to deactivate the role.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Role).where(Role.id == role_id)
     role_to_deactivate = session.exec(statement).one()
     role_to_deactivate.is_active = False
@@ -69,7 +117,6 @@ async def deactivate_role(
     return role_to_deactivate
 
 
-# Update role
 @router.put("/")
 async def update_role(
     id: str = None,
@@ -78,6 +125,23 @@ async def update_role(
     is_active: bool = None,
     session: Session = Depends(get_session),
 ):
+    """
+    Update a role.
+
+    Parameters
+    ----------
+    id : str
+        ID of role to be updated.
+    new_name : str
+        New name of the role.
+    new_short_name : str
+        New short name of the role.
+    is_active : bool
+        New status of the role.
+    session : Session
+        SQL session that is to be used to update the role.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Role.is_active).where(Role.id == id)
     result = session.exec(statement).first()
     if result == True:

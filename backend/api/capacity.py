@@ -12,7 +12,17 @@ session = Session(engine)
 
 @router.post("/")
 async def post_capacity(*, capacity: Capacity, session: Session = Depends(get_session)):
-    """Post a capacity."""
+    """
+    Post new capacity.
+
+    Parameters
+    ----------
+    capacity : Capacity
+        Capacity that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the capacity.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Capacity).where(
         and_(
             Capacity.user_id == capacity.user_id,
@@ -40,9 +50,27 @@ async def get_capacities(
     month: int = None,
     year: int = None,
 ):
-    """Get list of all capacities"""
+    """
+    Get list of all capacities.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of the epic areas.
+        Defaults to creating a dependency on the running SQL model session.
+    is_locked : bool
+        Whether or not the capacity is locked or not.
+    user_id : int
+        User id of the user in question.
+    team_id : int
+        Team id of the user's team.
+    month : int
+        Month of capacity in question.
+    year : int
+        Year of capacity in question.
+    """
     statement = select(Capacity)
-    """Select capacity by user_id, team_id, month, year"""
+    # Select capacity by user_id, team_id, month, year
     if (user_id and team_id and month and year) != None:
         statement = (
             select(
@@ -71,7 +99,17 @@ async def delete_capacities(
     capacity_id: str = None,
     session: Session = Depends(get_session),
 ):
-    """Delete a capacity"""
+    """
+    Delete a capacity
+
+    Parameters
+    ----------
+    capacity_id : str
+        ID of the capacity that is to be removed from the database.
+    session : Session
+        SQL session that is to be used to delete the capacity.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Capacity).where(
         Capacity.id == capacity_id,
     )

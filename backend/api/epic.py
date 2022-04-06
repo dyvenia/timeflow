@@ -18,7 +18,17 @@ async def post_epic(
     epic: Epic,
     session: Session = Depends(get_session),
 ):
-    """Post new epic"""
+    """
+    Post new epic.
+
+    Parameters
+    ----------
+    epic : Epic
+        Epic that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the epic.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement1 = select(Epic).where(Epic.name == epic.name)
     try:
         result = session.exec(statement1).one()
@@ -32,7 +42,15 @@ async def post_epic(
 
 @router.get("/")
 async def get_epic_list(session: Session = Depends(get_session)):
-    """Get list of epics"""
+    """
+    Get list of epics.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of the epics.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Epic)
     results = session.exec(statement).all()
     return results
@@ -40,7 +58,15 @@ async def get_epic_list(session: Session = Depends(get_session)):
 
 @router.get("/active")
 async def get_active_epics_list(session: Session = Depends(get_session)):
-    """Get list of active epics"""
+    """
+    Get list of active epics.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of the active epics.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Epic).where(Epic.is_active == True)
     results = session.exec(statement).all()
     return results
@@ -48,7 +74,19 @@ async def get_active_epics_list(session: Session = Depends(get_session)):
 
 @router.get("/teams/{team_id}/sponsors/{sponsor_id}/")
 async def get_epic_by_team_sponsor(team_id: int, sponsor_id: int):
-    """Get list of epics by team id and sponsor id"""
+    """
+    Get list of epics by team id and sponsor id.
+
+    Parameters
+    ----------
+    team_id : int
+        ID of team to pull epics from.
+    sponsor_id : int
+        ID of sponsor to pull epics from.
+    session : Session
+        SQL session that is to be used to pull the epics.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(
             Epic.id.label("epic_id"),
@@ -72,7 +110,17 @@ async def get_epic_by_team_sponsor(team_id: int, sponsor_id: int):
 async def get_client_name_by_epic_id(
     epic_id: int, session: Session = Depends(get_session)
 ):
-    """Get client name from epic_id"""
+    """
+    Get client name from epic_id.
+
+    Parameters
+    ----------
+    epic_id : int
+        ID of epic to pull client name from.
+    session : Session
+        SQL session that is to be used to pull the client name.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(Client.name.label("client_name"), Client.id.label("client_id"))
         .select_from(Epic)
@@ -90,7 +138,17 @@ async def activate_epic(
     epic_id: str = None,
     session: Session = Depends(get_session),
 ):
-    """Activate an epic"""
+    """
+    Activate an epic using its ID as a key.
+
+    Parameters
+    ----------
+    epic_id : str
+        ID of epic to be activated.
+    session : Session
+        SQL session that is to be used to activate the epic.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Epic).where(Epic.id == epic_id)
     epic_to_activate = session.exec(statement).one()
     epic_to_activate.is_active = True
@@ -106,7 +164,17 @@ async def deactivate_epic(
     epic_id: str = None,
     session: Session = Depends(get_session),
 ):
-    """Deactivate an epic"""
+    """
+    Deactivate an epic using its ID as a key.
+
+    Parameters
+    ----------
+    epic_id : str
+        ID of epic to be deactivated.
+    session : Session
+        SQL session that is to be used to deactivate the epic.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Epic).where(Epic.id == epic_id)
     epic_to_deactivate = session.exec(statement).one()
     epic_to_deactivate.is_active = False
@@ -124,7 +192,21 @@ async def update_epic(
     new_name: str = None,
     session: Session = Depends(get_session),
 ):
-    """Update an epic"""
+    """
+    Update an epic.
+
+    Parameters
+    ----------
+    epic_id : str
+        ID of epic to be updated.
+    new_short_name : str
+        Name of new short name.
+    new_name : str
+        Name of new name.
+    session : Session
+        SQL session that is to be used to update the epic.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(Epic).where(Epic.id == epic_id).where(Epic.is_active == True)
     epic_to_update = session.exec(statement).one()
     if new_short_name != None:

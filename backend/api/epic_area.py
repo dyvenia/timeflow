@@ -16,7 +16,17 @@ async def post_epic_area(
     epic_area: EpicArea,
     session: Session = Depends(get_session),
 ):
-    """Post new epic area"""
+    """
+    Post new epic area.
+
+    Parameters
+    ----------
+    epic_area : EpicArea
+        Epic area that is to be added to the database.
+    session : Session
+        SQL session that is to be used to add the epic area.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement1 = select(EpicArea).where(
         or_(EpicArea.name == epic_area.name, EpicArea.id == epic_area.id)
     )
@@ -32,7 +42,16 @@ async def post_epic_area(
 
 @router.get("/")
 async def get_epic_area_list(session: Session = Depends(get_session)):
-    """Get epic area list"""
+    """
+    Get list of epic areas.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of the epic areas.
+        Defaults to creating a dependency on the running SQL model session.
+    """
+
     statement = select(EpicArea)
     results = session.exec(statement).all()
     return results
@@ -40,7 +59,15 @@ async def get_epic_area_list(session: Session = Depends(get_session)):
 
 @router.get("/active")
 async def get_active_epic_area_list(session: Session = Depends(get_session)):
-    """Get list of active epic areas along with name of epic"""
+    """
+    Get list of active epic areas along with the name of their respective epics.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get a list of the active epic areas.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(
             EpicArea.id,
@@ -60,7 +87,17 @@ async def get_active_epic_area_list(session: Session = Depends(get_session)):
 async def read_epic_areas(
     epic_area_name: str = None, session: Session = Depends(get_session)
 ):
-    """Read a single epic area using a given epic area name."""
+    """
+    Return a single epic area using a given epic area name as a key.
+
+    Parameters
+    ----------
+    epic_area_name : str
+        Name of the epic area to be returned.
+    session : Session
+        SQL session that is to be used to read the single epic area.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(EpicArea).where(EpicArea.name == epic_area_name)
     try:
         result = session.exec(statement).one()
@@ -74,7 +111,15 @@ async def read_epic_areas(
 async def get_epic_name_by_epic_area_id(
     epic_area_id: int, session: Session = Depends(get_session)
 ):
-    """Get epic name by epic area id"""
+    """
+    Return the epic name using the epic area id as a key.
+
+    Parameters
+    ----------
+    session : Session
+        SQL session that is to be used to get the name of the epic.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = (
         select(EpicArea.id, Epic.id, Epic.name)
         .join(Epic)
@@ -90,7 +135,17 @@ async def activate_epic_area(
     epic_area_name: str = None,
     session: Session = Depends(get_session),
 ):
-    """Activate epic area"""
+    """
+    Activate an epic area using its name as a key.
+
+    Parameters
+    ----------
+    epic_area_name : str
+        Name of the epic area to be activated
+    session : Session
+        SQL session that is to be used to activate an epic area.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(EpicArea).where(EpicArea.name == epic_area_name)
     epic_area_to_activate = session.exec(statement).one()
     epic_area_to_activate.is_active = True
@@ -106,7 +161,17 @@ async def deactivate_epic_area(
     epic_area_name: str = None,
     session: Session = Depends(get_session),
 ):
-    """Deactivate epic area"""
+    """
+    Deactivate an epic area using its name as a key.
+
+    Parameters
+    ----------
+    epic_area_name : str
+        Name of the epic area to be deactivated
+    session : Session
+        SQL session that is to be used to deactivate an epic area.
+        Defaults to creating a dependency on the running SQL model session.
+    """
     statement = select(EpicArea).where(EpicArea.name == epic_area_name)
     epic_area_to_deactivate = session.exec(statement).one()
     epic_area_to_deactivate.is_active = False
@@ -118,15 +183,37 @@ async def deactivate_epic_area(
 
 
 @router.put("/")
-async def update_epic(
+async def update_epic_area(
     id: str = None,
     epic_id: str = None,
     name: str = None,
     is_active: bool = None,
     session: Session = Depends(get_session),
 ):
+<<<<<<< HEAD
+    """
+    Update an epic area with new values.
+
+    Parameters
+    ----------
+    id : str
+        ID of epic area to be updated.
+    epic_id : str
+        Epic ID to be updated.
+    epic_area_name : str
+        Name of the epic area to be updated.
+    is_active : bool
+        Change the status of the epic area.
+    session : Session
+        SQL session that is to be used to deactivate an epic area.
+        Defaults to creating a dependency on the running SQL model session.
+    """
+    statement = select(EpicArea).where(or_(EpicArea.name == name, EpicArea.id == id))
+    
+=======
     """Update an epic area"""
     statement = select(EpicArea).where(or_(EpicArea.name == name, EpicArea.id == id))
+>>>>>>> main
     epic_area_to_update = session.exec(statement).one()
     epic_area_to_update.epic_id = epic_id
     epic_area_to_update.name = name

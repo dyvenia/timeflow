@@ -20,7 +20,7 @@ pip install "idom[stable]"
 
 4) Install Tailwind CSS
 ```bash
-npm install -D tailwindcss postcss autoprefixer
+npm install -D tailwindcss postcss postcss-cli autoprefixer
 npx tailwindcss init
 ```
 
@@ -50,13 +50,29 @@ npm run build
 ```
 
 # Docker instructions
-* Open a git bash terminal
-* Ensure you are in the root directory of the project
-* Run `sh build.sh`
-* Run `docker-compose up`
 
-# Notes
-* Make sure to run `npm run build` to build the CSS before building the Docker images
-* the `base_url` variable has to be modified in **idom_frontend/config.py** depending on the set up:
-  * While the service is being run on the server, change `base_url` to `http://165.232.72.164:8000`
-  * While the service is being run locally only, change `base_url` to `http://127.0.0.1:8000`
+1) Open a git bash terminal
+
+2) Ensure you are in the root directory of the project
+
+3) Navigate to `frontend/tailwind` and run `npm run build`
+
+```bash
+cd frontend/tailwind
+npm run build
+```
+
+4) Run sh build.sh in home directory
+```bash
+cd ../..
+sh build.sh
+```
+
+5) Run docker-compose up
+```bash
+docker-compose up
+```
+*If you don't wish to look at the docker logs, run the command `docker-compose up` with the flag `-d` instead of `docker-compose up`*
+```bash
+docker-compose up -d
+```

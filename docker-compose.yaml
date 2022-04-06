@@ -1,10 +1,10 @@
 version: '3'
 networks:
-    static-network:
-        ipam:
-            driver: default
-            config:
-                - subnet: 172.28.0.0/16
+  static-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
 services:
   fastapi:
     image: fastapi:v1
@@ -15,11 +15,11 @@ services:
       - 8002:8002
     container_name: fastapi
     stdin_open: true # docker run -i
-    tty: true        # docker run -t
+    tty: true # docker run -t
     networks:
       static-network:
         ipv4_address: 172.28.1.2
-  
+
   idom:
     image: idom:v1
     volumes:

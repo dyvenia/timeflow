@@ -3,7 +3,11 @@ from idom import vdom
 arrow_down = vdom(
     "svg",
     {
+<<<<<<< HEAD
+        "class": "inline fill-nav w-4 h-4 mt-1 ml-2 transition-transform duration-200 transform"
+=======
         "class": "inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1"
+>>>>>>> main
     },
     vdom(
         "path",
@@ -18,7 +22,11 @@ arrow_down = vdom(
 arrow_up = vdom(
     "svg",
     {
+<<<<<<< HEAD
+        "class": "inline fill-nav w-4 h-4 mt-1 ml-3 transition-transform duration-200 transform md:mt-1 md:ml-2 rotate-180"
+=======
         "class": "inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1 rotate-180"
+>>>>>>> main
     },
     vdom(
         "path",

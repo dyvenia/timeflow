@@ -1,0 +1,23 @@
+site_name: Timeflow Docs
+site_url: https://dyvenia.github.io/timeflow/
+nav:
+    - Home: index.md
+    - How-tos: how-tos.md
+    - Tutorials: tutorials.md
+    - Code References:
+        - "API sources" : api-reference.md
+
+theme:
+  name: "material"
+  features:
+    - navigation.tabs
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          rendering:
+            show_root_heading: yes
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
