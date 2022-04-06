@@ -16,7 +16,6 @@ from components.layout import Row, Column, Container
 from components.lists import ListSimple
 from components.table import SimpleTable
 from components.controls import Button
-from components.heading import H3
 
 from data.common import (
     year_month_dict_list,
@@ -29,8 +28,6 @@ from data.timelogs import Timelog, to_timelog
 from data.epics import epics_names
 
 from config import base_url
-from components.controls import TableActions
-from components.yourTimelog import YourTimelog
 
 
 @component
@@ -44,8 +41,7 @@ def page():
     deleted_timelog, set_deleted_timelog = use_state("")
     submitted_user, set_submitted_user = use_state("")
     is_true, set_is_true = use_state(True)
-    return html.div(
-        {'class': "w-full"},
+    return Container(
         create_timelog_form(
             year_month,
             set_year_month,
@@ -62,12 +58,10 @@ def page():
             is_true,
             set_is_true,
         ),
-        Container(
-            Column(
-                Row(timelogs_table(is_true)),
-            ),
-            delete_timelog_input(set_deleted_timelog)
-        )
+        Column(
+            Row(timelogs_table(is_true)),
+        ),
+        Row(delete_timelog_input(set_deleted_timelog)),
     )
 
 
@@ -163,21 +157,16 @@ def create_timelog_form(
         is_disabled = False
 
     btn = Button(is_disabled, handle_submit, label="Submit")
-    return html.section(
-        {'class': "bg-filter-block-bg py-4 text-sm"},
-        Container(
-            H3('Your current project'),
-            html.div(
-                {'class': "flex flex-wrap justify-between items-center md:justify-start 2xl:justify-between"},
-                selector_user,
-                selector_epic_id,
-                selector_year_month,
-                selector_days,
-                selector_start_time,
-                selector_end_time,
-                btn
-            )
-        )
+    return Column(
+        Row(
+            selector_user,
+            selector_epic_id,
+            selector_year_month,
+            selector_days,
+            selector_start_time,
+            selector_end_time,
+        ),
+        Row(btn),
     )
 
 
@@ -196,11 +185,7 @@ def timelogs_table(is_true):
             "count_days": item["count_days"],
         }
         rows.append(d)
-    return html.div(
-        {"class": "w-full"},
-        YourTimelog(),
-        TableActions(),
-        SimpleTable(rows=rows))
+    return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 
 @component
@@ -215,7 +200,12 @@ def delete_timelog_input(set_deleted_timelog):
     inp_username = Input(
         set_value=set_timelog_to_delete,
         label="timelog id to delete",
-        width='full'
     )
-
-    return Column(Row(inp_username), Button(False, handle_delete, "Submit"))
+    btn = html.button(
+        {
+            "class": "relative w-fit h-fit px-2 py-1 text-lg border text-gray-50  border-secondary-200",
+            "onClick": handle_delete,
+        },
+        "Submit",
+    )
+    return Column(Row(inp_username), Row(btn))

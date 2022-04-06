@@ -190,6 +190,7 @@ async def update_epic_area(
     is_active: bool = None,
     session: Session = Depends(get_session),
 ):
+<<<<<<< HEAD
     """
     Update an epic area with new values.
 
@@ -209,6 +210,10 @@ async def update_epic_area(
     """
     statement = select(EpicArea).where(or_(EpicArea.name == name, EpicArea.id == id))
     
+=======
+    """Update an epic area"""
+    statement = select(EpicArea).where(or_(EpicArea.name == name, EpicArea.id == id))
+>>>>>>> main
     epic_area_to_update = session.exec(statement).one()
     epic_area_to_update.epic_id = epic_id
     epic_area_to_update.name = name

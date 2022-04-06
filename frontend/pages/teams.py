@@ -79,18 +79,15 @@ def create_team_form(
         set_submitted_short_name(short_name)
 
     # Create input field for the name of the team
-    inp_name = Input(set_value=set_name,
-                     label="name of the team", width='[32%]')
+    inp_name = Input(set_value=set_name, label="name of the team")
 
     # Create input field for the short name of the team
-    inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the team", width='[32%]')
+    inp_short_name = Input(set_value=set_short_name, label="short name of the team")
 
     # Create a dropdown of users which can then be selected
     selector_lead_user_id = Selector2(
         set_value=set_lead_user_id,
         data=users_names(label="select user lead"),
-        width='32%'
     )
 
     # Create submit button
@@ -101,13 +98,12 @@ def create_team_form(
             inp_name,
             inp_short_name,
             selector_lead_user_id,
-            justify='justify-between'
         ),
         Row(btn),
     )
 
 
-@ component
+@component
 def list_teams(submitted_name, submitted_short_name):
     """
     Return rows consisting of each team along with its leader (user).
@@ -120,7 +116,7 @@ def list_teams(submitted_name, submitted_short_name):
     return html.div({"class": "flex w-full"}, SimpleTable(rows=rows))
 
 
-@ component
+@component
 def deactivate_team(set_deact_name):
     """Deactivate a team without deleting it."""
     name_to_deact, set_name_to_deact = use_state("")
@@ -131,8 +127,7 @@ def deactivate_team(set_deact_name):
         set_deact_name(name_to_deact)
 
     # Create input field for name of team to be deactivated
-    inp_deact_name = Input(set_value=set_name_to_deact,
-                           label="team to be deactivated", width='full')
+    inp_deact_name = Input(set_value=set_name_to_deact, label="team to be deactivated")
 
     # Create the deactivation button
     btn = deactivation_button(name_to_deact, handle_deactivation)
@@ -140,7 +135,7 @@ def deactivate_team(set_deact_name):
     return Column(Row(inp_deact_name), Row(btn))
 
 
-@ component
+@component
 def activate_team(set_activ_name):
     """Activate a team."""
     name_to_activ, set_name_to_activ = use_state("")
@@ -151,8 +146,7 @@ def activate_team(set_activ_name):
         set_activ_name(name_to_activ)
 
     # Create input field for name of team to be activated
-    inp_activ_name = Input(set_value=set_name_to_activ,
-                           label="team to be activated", width='full')
+    inp_activ_name = Input(set_value=set_name_to_activ, label="team to be activated")
 
     # Create the activation button
     btn = activation_button(name_to_activ, handle_activation)

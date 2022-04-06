@@ -14,7 +14,7 @@ from pages.capacities import page as capacities_page
 from pages.demands import page as demands_page
 
 from components.layout import Column, Row, FlexContainer
-from components.header import Header
+from components.sidebar import Sidebar
 
 
 @component
@@ -49,9 +49,7 @@ def page():
     elif current_page == "Demands":
         current_page_component = demands_page(key="demands_page")
     return html.div(
-        {"class": "md:flex w-full"},
-        html.link({"href": "../static/css/styles.css", "rel": "stylesheet"}),
-        Header(current_page, set_current_page,
-               pages=pages, title="timeflow UI"),
+        {"class": "flex w-full"},
+        Sidebar(current_page, set_current_page, pages=pages, title="timeflow UI"),
         FlexContainer(current_page_component),
     )

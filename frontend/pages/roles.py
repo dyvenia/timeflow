@@ -1,5 +1,4 @@
 import json
-from turtle import width
 from idom import html, use_state, component, event
 import requests
 from sanic import response
@@ -33,8 +32,7 @@ def page():
             set_submitted_name,
         ),
         Column(
-            Row(list_roles(submitted_name, submitted_short_name),
-                justify='justify-between'),
+            Row(list_roles(submitted_name, submitted_short_name)),
         ),
         Row(update_role(is_updated, set_is_updated)),
         Row(deactivate_role(set_deact_role), activate_role(set_activ_role)),
@@ -74,10 +72,8 @@ def create_role_form(
         )
         set_submitted_name(name)
 
-    inp_name = Input(set_value=set_name,
-                     label="name of the role",  width='[48%]')
-    inp_short_name = Input(set_value=set_short_name,
-                           label="short name of the role", width='[48%]')
+    inp_name = Input(set_value=set_name, label="name of the role")
+    inp_short_name = Input(set_value=set_short_name, label="short name of the role")
 
     is_disabled = True
     if name != "" and short_name != "":
@@ -85,7 +81,7 @@ def create_role_form(
     btn = Button(is_disabled, handle_submit, label="Submit")
 
     return Column(
-        Row(inp_name, inp_short_name, justify='justify-between'),
+        Row(inp_name, inp_short_name),
         Row(btn),
     )
 
@@ -125,20 +121,17 @@ def update_role(is_updated, set_is_updated):
         elif is_updated == False:
             set_is_updated(True)
 
-    inp_role_id = Input(set_role_id, label="role id to update", width='[32%]')
-    inp_name_update = Input(
-        set_name_to_update, label="full name to update", width='[32%]')
+    inp_role_id = Input(set_role_id, label="role id to update")
+    inp_name_update = Input(set_name_to_update, label="full name to update")
     inp_short_name_update = Input(
-        set_short_name_to_update, label="short name to update", width='[32%]'
+        set_short_name_to_update, label="short name to update"
     )
     is_disabled = True
     if role_id != "" and (name_to_update != "" or short_name_to_update != ""):
         is_disabled = False
-    btn_update = Button(
-        is_disabled, handle_submit=handle_update, label="Update")
+    btn_update = Button(is_disabled, handle_submit=handle_update, label="Update")
     return Column(
-        Row(inp_role_id, inp_name_update, inp_short_name_update,
-            justify='justify-between'), Row(btn_update)
+        Row(inp_role_id, inp_name_update, inp_short_name_update), Row(btn_update)
     )
 
 
@@ -155,13 +148,12 @@ def deactivate_role(set_deact_role):
         return True
 
     inp_deact_role = Input(
-        set_value=set_role_to_deact, label="role id to be deactivated", width='96%'
+        set_value=set_role_to_deact, label="role id to be deactivated"
     )
     is_disabled = True
     if role_to_deact != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_deactivation,
-                 label="Deactivate")
+    btn = Button(is_disabled, handle_submit=handle_deactivation, label="Deactivate")
     return Column(Row(inp_deact_role), Row(btn))
 
 
@@ -177,11 +169,9 @@ def activate_role(set_activ_role):
         set_activ_role(role_to_activ)
         return True
 
-    inp_activ_role = Input(set_value=set_role_to_activ,
-                           label="role id to be activated", width='96%')
+    inp_activ_role = Input(set_value=set_role_to_activ, label="role id to be activated")
     is_disabled = True
     if role_to_activ != "":
         is_disabled = False
-    btn = Button(is_disabled, handle_submit=handle_activation,
-                 label="Activate")
-    return Column(Row(inp_activ_role, justify='justify-end'), Row(btn))
+    btn = Button(is_disabled, handle_submit=handle_activation, label="Activate")
+    return Column(Row(inp_activ_role), Row(btn))

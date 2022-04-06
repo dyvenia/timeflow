@@ -1,7 +1,6 @@
 import asyncio
 from cProfile import label
 import json
-from turtle import width
 from idom import html, run, use_state, component, event, vdom
 import requests
 from sanic import Sanic, response
