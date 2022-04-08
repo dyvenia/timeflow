@@ -13,10 +13,33 @@ from pages.roles import page as roles_page
 from pages.capacities import page as capacities_page
 from pages.demands import page as demands_page
 
-from components.layout import FlexContainer
+from components.layout import FlexContainer, Container
 from components.header import Header
 
 from idom.server import fastapi
+
+
+@component
+def BreadCrambs(current_page):
+    return Container(
+        html.ul(
+            {'class': 'breadcrumb my-4'},
+            html.li(
+                html.a(
+                    {'href': '#'},
+                    html.i(
+                        {'class': 'icon icon-home'}
+                    )
+                ),
+            ),
+            html.li(
+                html.a(
+                    {'href': '#'},
+                    current_page
+                ),
+            )
+        )
+    )
 
 
 @component
@@ -65,6 +88,16 @@ def page():
     return html.div(
         {"class": "xl:flex w-full"},
         html.link({"href": "../static/css/styles.css", "rel": "stylesheet"}),
-        Header(current_page, set_current_page, pages=pages, title="timeflow UI"),
-        FlexContainer(current_page_component),
+        html.link({"href": "../static/css/custom.css", "rel": "stylesheet"}),
+        html.link(
+            {"href": "//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css", "rel": "stylesheet"}),
+        Header(current_page, set_current_page,
+               pages=pages, title="timeflow UI"),
+        FlexContainer(
+            html.div(
+                {'class': 'w-full'},
+                BreadCrambs(current_page),
+                current_page_component
+            )
+        ),
     )
