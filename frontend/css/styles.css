@@ -614,8 +614,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: fit-content;
 }
 
-.h-\[50vh\] {
-  height: 50vh;
+.h-\[60vh\] {
+  height: 60vh;
 }
 
 .min-h-screen {
