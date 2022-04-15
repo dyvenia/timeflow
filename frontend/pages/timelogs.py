@@ -68,6 +68,7 @@ def page():
             ),
             delete_timelog_input(set_deleted_timelog),
         ),
+
     )
 
 

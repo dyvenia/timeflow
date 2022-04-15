@@ -17,6 +17,7 @@ admin = {
     "Rates": "Rates",
     "Capacities": "Capacities",
     "Demands": "Demands",
+    "Billing": "Billing"
 }
 
 

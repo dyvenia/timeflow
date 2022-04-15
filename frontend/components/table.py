@@ -6,6 +6,7 @@ import math
 
 from components.input import Checkbox
 from components.tablebatch_row import TablebatchRow
+from components.layout import Container
 
 per_page_list = [
     5,
@@ -15,6 +16,7 @@ per_page_list = [
 thClass = 'w-[176px] text-left text-text-table-head uppercase py-1 leading-5'
 trClass = 'border-b-[1px] border-border-table'
 tdClassActive = 'w-[176px] pt-4 pb-3'
+tdClass = 'w-[176px] pt-4 pb-3'
 
 
 @component
@@ -131,3 +133,386 @@ def HiddenButton(is_hidden, set_is_hidden):
     )
 
     return btn
+
+
+data_thead = [
+    'Client',
+    'Epic',
+    'Username',
+    'Forecasted Days',
+    'Billings',
+    'Timelogs Days',
+    'Billings'
+]
+
+
+@component
+def BillingTable():
+
+    ths = [html.th({"class": thClass}, header)
+           for header in data_thead]
+    thead = html.thead(
+        {},
+        html.tr(
+            {"class": "bg-table-head"},
+            ths),
+    )
+
+    tbody = html.tbody(
+        {},
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'rowspan': '6'},
+                'client_a'
+            ),
+            html.td(
+                {'rowspan': '4'},
+                'epic_a'
+            ),
+            html.td(
+                {'class': tdClass},
+                'user_a'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'class': tdClass},
+                'user_a'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'class': tdClass},
+                'user_a'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'class': tdClass},
+                'user_a'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'rowspan': '2'},
+                'epic_b'
+            ),
+            html.td(
+                'user_b'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                'user_b'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table bg-table-head'},
+            html.th(
+                {'colspan': '3', 'class': 'text-left '},
+                'Client total'
+            ),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'rowspan': '6'},
+                'client_b'
+            ),
+            html.td(
+                {'rowspan': '4'},
+                'epic_c'
+            ),
+            html.td(
+                {'class': tdClass},
+                'user_a'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'class': tdClass},
+                'user_b'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'class': tdClass},
+                'user_c'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'class': tdClass},
+                'user_d'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                {'rowspan': '2'},
+                'epic_d'
+            ),
+            html.td(
+                'user_b'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table'},
+            html.td(
+                'user_b'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            ),
+            html.td(
+                {'class': tdClass},
+                '(...)'
+            )
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table bg-table-head'},
+            html.th(
+                {'colspan': '3', 'class': 'text-left'},
+                'Client total'
+            ),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table bg-table-head'},
+            html.th(
+                {'colspan': '3', 'class': 'text-left '},
+                'Grand total'
+            ),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+        ),
+        html.tr(
+            {'class': 'border-b-[1px] border-border-table bg-table-head'},
+            html.th(
+                {'colspan': '3', 'class': 'text-left '},
+                'Country total'
+            ),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+            html.td({'class': tdClass}, 'sum'),
+        )
+
+    )
+
+    return Container(
+        html.div(
+            {'class': 'overflow-auto py-6 text-xs'},
+            html.table(
+                {
+                    'class': 'w-[905px] mx-auto xl:w-full'
+                },
+                thead,
+                tbody
+            )
+        )
+
+    )
