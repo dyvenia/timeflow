@@ -18,6 +18,7 @@ from uiflow.components.header import Header
 
 menu_items = {
     # 'title': 'page',
+    "Forecasts": "Forecasts",
     "Users": "Users",
     "Roles": "Roles",
     "Epics": "Epics",
@@ -27,8 +28,10 @@ menu_items = {
     "Clients": "Clients",
     "Rates": "Rates",
     "Capacities": "Capacities",
-    "Demands": "Demands",
+    "Demands": "Demands"
+    
 }
+
 
 
 @component
@@ -40,9 +43,9 @@ def timeflow():
     github_username = fetch_username()
 
     current_page, set_current_page = use_state("Timelogs")
-    pages = ["Timelogs", "Forecasts"]
+    pages = ["Timelogs"]
 
-    print("here", current_page)
+
     if current_page == "Users":
         if user_role == "admin" or user_role == None:
             current_page_component = users_page(key="users_page")
@@ -61,7 +64,8 @@ def timeflow():
         if user_role == "admin" or user_role == None:
             current_page_component = clients_page(key="clients_page")
     elif current_page == "Forecasts":
-        current_page_component = forecasts_page(key="forecasts_page")
+        if user_role == "admin" or user_role == None:
+            current_page_component = forecasts_page(key="forecasts_page")
     elif current_page == "Rates":
         if user_role == "admin" or user_role == None:
             current_page_component = rates_page(key="rates_page")
@@ -71,7 +75,7 @@ def timeflow():
     elif current_page == "Sponsors":
         if user_role == "admin" or user_role == None:
             current_page_component = sponsors_page(key="sponsors_page")
-    elif current_page == "Capacities":
+    elif current_page == "Capacities":      
         if user_role == "admin" or user_role == None:
             current_page_component = capacities_page(key="capacities_page")
     elif current_page == "Demands":
