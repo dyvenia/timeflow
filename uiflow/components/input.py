@@ -201,5 +201,26 @@ def InputDateTime(set_value):
             "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
             "type": "datetime-local",
             "onChange": lambda event: set_value(event["target"]["value"]),
+        }
+    )
+
+
+@component
+def display_value(id, value):
+    """
+    Display a value in a selector-like style.
+
+    Parameters
+    ----------
+    id: int
+        Id of the value to be displayed
+    """
+    return html.div(
+        {
+            "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
         },
+        html.h3(
+            {"value": id},
+            value,
+        ),
     )

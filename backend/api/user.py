@@ -75,6 +75,18 @@ async def get_users(
             .where(AppUser.is_active == is_active)
             .order_by(AppUser.start_date.desc())
         )
+    elif username != None:
+        statement = (
+            select(
+                AppUser.id,
+                AppUser.username,
+                AppUser.first_name,
+                AppUser.last_name,
+                AppUser.start_date,
+            )
+            .select_from(AppUser)
+            .where(AppUser.username == username)
+        )
     result = session.exec(statement).all()
     return result
 

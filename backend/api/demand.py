@@ -73,7 +73,7 @@ async def get_demands(
             select(
                 Demand.id.label("demand_id"),
                 Team.short_name.label("team_short_name"),
-                Epic.short_name.label("epic_short_name"),
+                Epic.name.label("epic_name"),
                 Demand.year,
                 Demand.month,
                 Demand.days,
@@ -91,7 +91,7 @@ async def get_demands(
             select(
                 Demand.id.label("demand_id"),
                 Team.short_name.label("team_short_name"),
-                Epic.short_name.label("epic_short_name"),
+                Epic.name.label("epic_name"),
                 Demand.year,
                 Demand.month,
                 Demand.days,

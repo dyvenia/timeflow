@@ -76,6 +76,64 @@ def SimpleTable(rows: List[Any]):
 
 
 @component
+def RatesTable(
+    rows: List[Any], select_per_page, set_select_per_page, page_number, set_page_number
+):
+    checked, set_checked = use_state({})
+    try:
+        trs = []
+        p = page_number
+        m = p - 1
+        number_of_visible_rows = int(select_per_page)
+        a = m * number_of_visible_rows
+        b = a + number_of_visible_rows
+        qty_page = math.ceil(len(rows) / number_of_visible_rows)
+        count = 0
+        for row in rows[a:b]:
+            tds = []
+            count += 1
+
+            for k in row:
+                value = row[k]
+                tds.append(html.td({"class": tdClassActive}, value))
+
+            trs.append(TablebatchRow(count, tds, checked, set_checked))
+
+        ths = [html.th({"class": thClass}, header) for header in rows[0].keys()]
+        thead = html.thead(
+            {},
+            html.tr({"class": "bg-table-head"}, html.th({"class": "w-6"}), ths),
+        )
+        tbody = html.tbody(
+            {},
+            trs,
+        )
+        pages_total = math.ceil(len(rows) / number_of_visible_rows)
+        pg_range = range(1, pages_total + 1)
+        list_pages_nr = []
+        for n in pg_range:
+            list_pages_nr.append(n)
+        table = html.div(
+            {"class": "overflow-auto py-6 text-xs"},
+            html.table({"class": "w-[905px] mx-auto xl:w-full"}, thead, tbody),
+        )
+
+        return html.div(
+            {"class": "flex flex-col w-full space-y-2"},
+            table,
+            Row(
+                PaginationBlock(
+                    set_page_number, qty_page, set_select_per_page, per_page_list
+                ),
+            ),
+        )
+    except TypeError:
+        return html.div()
+    except IndexError:
+        return html.div()
+
+
+@component
 def SubmitTable(rows: List[Any]):
     trs = []
     for row in rows[-5:]:

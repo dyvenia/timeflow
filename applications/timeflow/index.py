@@ -28,10 +28,8 @@ menu_items = {
     "Clients": "Clients",
     "Rates": "Rates",
     "Capacities": "Capacities",
-    "Demands": "Demands"
-    
+    "Demands": "Demands",
 }
-
 
 
 @component
@@ -44,7 +42,6 @@ def timeflow():
 
     current_page, set_current_page = use_state("Timelogs")
     pages = ["Timelogs"]
-
 
     if current_page == "Users":
         if user_role == "admin" or user_role == None:
@@ -59,7 +56,9 @@ def timeflow():
         if user_role == "admin" or user_role == None:
             current_page_component = epic_areas_page(key="epic_areas_page")
     elif current_page == "Timelogs":
-        current_page_component = timelogs_page(key="timelogs_page")
+        current_page_component = timelogs_page(
+            key="timelogs_page", app_role=user_role, github_username=github_username
+        )
     elif current_page == "Clients":
         if user_role == "admin" or user_role == None:
             current_page_component = clients_page(key="clients_page")
@@ -75,7 +74,7 @@ def timeflow():
     elif current_page == "Sponsors":
         if user_role == "admin" or user_role == None:
             current_page_component = sponsors_page(key="sponsors_page")
-    elif current_page == "Capacities":      
+    elif current_page == "Capacities":
         if user_role == "admin" or user_role == None:
             current_page_component = capacities_page(key="capacities_page")
     elif current_page == "Demands":

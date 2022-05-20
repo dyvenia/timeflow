@@ -127,7 +127,6 @@ def update_users(is_event, set_is_event):
 def deactivate_users(is_event, set_is_event):
     """Deactivate an user without deleting it."""
     deactiv_user_id, set_deactiv_user_id = use_state("")
-    print("deactiv iser id is", deactiv_user_id)
 
     def handle_deactivation(event):
         """Set the given user's is_active column to False."""
@@ -153,7 +152,6 @@ def deactivate_users(is_event, set_is_event):
 def activate_users(is_event, set_is_event):
     """Activate an user without deleting it."""
     activ_user_id, set_activ_user_id = use_state("")
-    print("activ iser id is", activ_user_id)
 
     def handle_activation(event):
         """Set the given user's is_active column to False."""

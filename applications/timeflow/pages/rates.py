@@ -3,7 +3,7 @@ from datetime import datetime
 
 from uiflow.components.input import Input, Selector2
 from uiflow.components.layout import Row, Column, Container
-from uiflow.components.table import SimpleTable
+from uiflow.components.table import SimpleTable, RatesTable
 from uiflow.components.controls import Button
 from ..data.common import (
     months_start,
@@ -15,7 +15,7 @@ from ..data.rates import (
     rate_update,
     to_rate,
     rates_all,
-    rates_active_by_user
+    rates_active_by_user,
 )
 
 from ..data.clients import clients_names
@@ -138,13 +138,17 @@ def create_rates_form(
 
 @component
 def rates_table(user_id, client_id):
-    if (user_id and client_id) != "":
-        rows = rate_active_by_user_client(user_id, client_id)
-    elif user_id != "":
-        rows = rates_active_by_user(user_id)
-    else:
-        rows = rates_all()
-    return html.div({"class": "flex w-full"}, SimpleTable(rows))
+    select_per_page, set_select_per_page = use_state(per_page_list[0])
+    page_number, set_page_number = use_state(1)
+
+    # if (user_id and client_id) != "":
+    #     rows = rate_active_by_user_client(user_id, client_id)
+    # elif user_id != "":
+    #     rows = rates_active_by_user(user_id)
+    # else:
+    rows = rates_all(1, 15)
+    return html.div({"class": "flex w-full"}, RatesTable(rows))
+
 
 @component
 def update_rate(set_updated_rate, user_id, client_id, month_start):

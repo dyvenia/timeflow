@@ -95,7 +95,7 @@ async def get_timelogs_all(session: Session = Depends(get_session)):
         select(
             TimeLog.id,
             AppUser.username.label("username"),
-            Epic.short_name.label("epic_name"),
+            Epic.name.label("epic_name"),
             EpicArea.name.label("epic_area_name"),
             TimeLog.start_time,
             TimeLog.end_time,

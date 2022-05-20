@@ -1,4 +1,5 @@
 from idom.backend import fastapi
+from idom import component
 
 
 base_url = "http://fastapi:8002"

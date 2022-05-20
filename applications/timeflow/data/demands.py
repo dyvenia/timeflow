@@ -46,7 +46,7 @@ def demands_all():
         d = {
             "demand id": item["demand_id"],
             "team": item["team_short_name"],
-            "epic": item["epic_short_name"],
+            "epic": item["epic_name"],
             "year": item["year"],
             "month": item["month"],
             "demand days": item["days"],
@@ -63,7 +63,7 @@ def demands_by_team(team_id) -> List[Dict]:
         d = {
             "demand id": item["demand_id"],
             "team": item["team_short_name"],
-            "epic": item["epic_short_name"],
+            "epic": item["epic_name"],
             "year": item["year"],
             "month": item["month"],
             "demand days": item["days"],
@@ -80,7 +80,7 @@ def demands_by_team_epic(team_id, epic_id) -> List[Dict]:
         d = {
             "demand id": item["demand_id"],
             "team": item["team_short_name"],
-            "epic": item["epic_short_name"],
+            "epic": item["epic_name"],
             "year": item["year"],
             "month": item["month"],
             "demand days": item["days"],
@@ -97,7 +97,7 @@ def demands_by_epic(epic_id) -> List[Dict]:
         d = {
             "demand id": item["demand_id"],
             "team": item["team_short_name"],
-            "epic": item["epic_short_name"],
+            "epic": item["epic_name"],
             "year": item["year"],
             "month": item["month"],
             "demand days": item["days"],
@@ -128,7 +128,6 @@ def demands_by_team_epic_year_month(team_id, epic_id, year_month) -> List[Dict]:
                 "demand days": item["days"],
             }
             rows.append(d)
-        print(rows)
         return rows
 
 

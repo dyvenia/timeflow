@@ -62,7 +62,11 @@ async def post_rate(
 
 
 @router.get("/")
-async def get_rates(session: Session = Depends(get_session)):
+async def get_rates(
+    page: int = None,
+    rows_number: int = None,
+    session: Session = Depends(get_session),
+):
     user_id = None
     client_id = None
     """
@@ -106,7 +110,15 @@ async def get_rates(session: Session = Depends(get_session)):
             .join(AppUser)
             .join(Client)
             .order_by(AppUser.username.asc())
+            .limit(rows_number)
+            .offset((page - 1) * rows_number)
         )
+    # if rows_number != None:
+    #     results = session.query(statement).limit(rows_number).all()
+        # statement.limit(rows_number)
+        # if page:
+        #     statement.offset((page - 1) * rows_number)
+
     results = session.exec(statement).all()
     return results
 
