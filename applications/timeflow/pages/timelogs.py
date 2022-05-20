@@ -1,9 +1,12 @@
-from idom import html, use_state, component, event, vdom
+from idom import html, use_state, component, event
+from idom.backend import fastapi
 import requests
 from datetime import datetime
+from applications.timeflow.config import get_user, fetch_username
 from uiflow.components.input import (
     Input,
     Selector2,
+    display_value,
 )
 from uiflow.components.layout import Row, Column, Container
 from uiflow.components.table import SimpleTable
@@ -12,14 +15,15 @@ from uiflow.components.heading import H3
 
 from ..data.common import (
     year_month_dict_list,
-    username,
     hours,
+    username,
     days_in_month,
 )
 
-from ..data.timelogs import to_timelog, timelog_by_user_id
 from ..data.epics import epics_names
-from ..data.epic_areas import epic_areas_names, epic_areas_names_by_epic_id
+from ..data.epic_areas import epic_areas_names_by_epic_id
+from ..data.timelogs import to_timelog, timelog_by_user_id
+from ..data.users import get_user_id_by_username
 
 from ..config import base_url
 from uiflow.components.controls import TableActions
@@ -28,7 +32,17 @@ from .utils import switch_state
 
 
 @component
-def page():
+def page(app_role: str, github_username: str):
+    """
+    Timelogs page.
+
+    Parameters
+    ----------
+    app_role: str
+        Role of user within the app.
+    github_username: str
+        GitHub username of user.
+    """
     year_month, set_year_month = use_state("")
     day, set_day = use_state("")
     user_id, set_user_id = use_state("")
@@ -57,10 +71,12 @@ def page():
             set_end_time,
             is_event,
             set_is_event,
+            app_role,
+            github_username,
         ),
         Container(
             Column(
-                Row(timelogs_table(user_id, is_event)),
+                Row(timelogs_table(user_id, is_event, app_role, github_username)),
             ),
             delete_timelog_input(set_deleted_timelog),
         ),
@@ -85,6 +101,8 @@ def create_timelog_form(
     set_end_time,
     is_event,
     set_is_event,
+    app_role,
+    github_username,
 ):
     """
     schema:
@@ -124,7 +142,13 @@ def create_timelog_form(
         switch_state(is_event, set_is_event)
         set_epic_id("")
 
-    selector_user = Selector2(set_value=set_user_id, data=username())
+    admin = True if app_role == "admin" or app_role == None else False
+
+    if admin == True:
+        selector_user = Selector2(set_value=set_user_id, data=username())
+    elif admin == False:
+        user_id = get_user_id_by_username(github_username)
+        selector_user = display_value(user_id, github_username)
 
     selector_epic_id = Selector2(
         set_value=set_epic_id,
@@ -156,7 +180,8 @@ def create_timelog_form(
     )
     is_disabled = True
     if (
-        user_id != ""
+        admin == True
+        and user_id != ""
         and epic_id != ""
         and epic_area_id != (0 or "")
         and year_month != ""
@@ -165,7 +190,17 @@ def create_timelog_form(
         and end_time != ""
     ):
         is_disabled = False
-
+    elif (
+        admin == False
+        and epic_id != ""
+        and epic_id != ""
+        and epic_area_id != (0 or "")
+        and year_month != ""
+        and day != ""
+        and start_time != ""
+        and end_time != ""
+    ):
+        is_disabled = False
     btn = Button(is_disabled, handle_submit, label="Submit")
     return html.section(
         {"class": "bg-filter-block-bg py-4 text-sm"},
@@ -189,9 +224,13 @@ def create_timelog_form(
 
 
 @component
-def timelogs_table(user_id, is_event):
+def timelogs_table(user_id, is_event, app_role, github_username):
     api = f"{base_url}/api/timelogs"
     response = requests.get(api)
+    admin = True if app_role == "admin" or app_role == None else False
+
+    if admin == False:
+        user_id = get_user_id_by_username(github_username)
 
     if user_id != "":
         rows = timelog_by_user_id(user_id)

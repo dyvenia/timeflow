@@ -90,18 +90,25 @@ def Selector(
 
 @component
 def Selector2(
-    set_value: Callable, data: List, width: str = "14%", md_width: str = "121px", set_sel_value: Callable = None, sel_value: Any = None,
+    set_value: Callable,
+    data: List,
+    width: str = "14%",
+    md_width: str = "121px",
+    set_sel_value: Callable = None,
+    sel_value: Any = None,
 ):
     options = []
     for row in data:
         option = html.option({"value": row["value"]}, row["display_value"])
         options.append(option)
+
     @event()
     async def on_change(event):
         set_value(event["target"]["value"])
         if (set_sel_value and sel_value) != None:
-            set_sel_value(sel_value) 
+            set_sel_value(sel_value)
         return True
+
     return html.div(
         {
             "class": f"block relative w-full sm:w-[48%] md:w-[{md_width}] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:border-t-appearance before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[{width}] 2xl:mr-0"
@@ -114,6 +121,7 @@ def Selector2(
             options,
         ),
     )
+
 
 def SelectorDropdownKeyValue(rows: List[Any]):
     crows = []
@@ -182,5 +190,26 @@ def Checkbox(value_checkbox, handle_change):
                 "onChange": lambda event: handle_change(event),
                 "type": "checkbox",
             }
+        ),
+    )
+
+
+@component
+def display_value(id, value):
+    """
+    Display a value in a selector-like style.
+
+    Parameters
+    ----------
+    id: int
+        Id of the value to be displayed
+    """
+    return html.div(
+        {
+            "class": "py-3 pl-3 w-full border-[1px] sm:w-[48%] md:w-[121px] bg-nav rounded-[3px] md:mr-2 my-4 before:content-[''] before:border-[6px] before:border-[transparent] before:top-1/2 before:right-5 before:-translate-y-0.5 before:absolute xl:w-[14%]",
+        },
+        html.h3(
+            {"value": id},
+            value,
         ),
     )

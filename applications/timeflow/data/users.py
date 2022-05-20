@@ -137,3 +137,14 @@ def users_names_inactive(label="select user") -> List[Select]:
         d = Select(value=item["id"], display_value=item["username"])
         username_rows.append(d)
     return username_rows
+
+
+def get_user_id_by_username(username):
+    """
+    Get user id by username.
+    """
+    api = f"{base_url}/api/users"
+    params = {"username": username}
+    response = requests.get(api, params=params).json()
+    user_id = response[0]["id"]
+    return user_id

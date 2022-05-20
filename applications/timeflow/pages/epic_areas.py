@@ -25,7 +25,6 @@ def page():
     submitted_name, set_submitted_name = use_state("")
     _, set_deact_name = use_state("")
     _, set_activ_name = use_state("")
-    print(name)
 
     return html.div(
         {"class": "w-full"},

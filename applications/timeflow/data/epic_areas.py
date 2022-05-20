@@ -47,6 +47,7 @@ def epic_areas_names() -> List[Select]:
         epic_area_name_rows.append(d)
     return epic_area_name_rows
 
+
 def epic_areas_names_by_epic_id(epic_id) -> List[Select]:
     api = f"{base_url}/api/epic_areas"
     if epic_id == "":
@@ -59,6 +60,7 @@ def epic_areas_names_by_epic_id(epic_id) -> List[Select]:
         rows.append(d)
     return rows
 
+
 def post_epic_area(epic_id: int, name: str):
     data = {
         "epic_id": epic_id,
@@ -67,7 +69,6 @@ def post_epic_area(epic_id: int, name: str):
         "created_at": str(datetime.now()),
         "updated_at": str(datetime.now()),
     }
-    print("here", data)
     response = requests.post(
         f"{base_url}/api/epic_areas",
         data=json.dumps(data),

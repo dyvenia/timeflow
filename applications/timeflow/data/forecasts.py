@@ -96,7 +96,6 @@ def to_forecast(user_id: int, epic_id: int, month: str, year: str, days: int) ->
         updated_at=str(datetime.now()),
         is_locked=False,
     )
-    print(dict(data))
     response = requests.post(
         f"{base_url}/api/forecasts",
         data=json.dumps(dict(data)),
